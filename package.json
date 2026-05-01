@@ -1,0 +1,25 @@
+{
+  "name": "dachain-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "setup": "node index.js --setup",
+    "test": "node --test",
+    "clear-log": "node index.js --clear-log",
+    "clear-data": "node index.js --clear-data",
+    "check-log": "node index.js --check-log",
+    "check-config": "node index.js --check-config",
+    "check-data": "node index.js --check-data"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "ethers": "^6.15.0",
+    "figlet": "^1.8.2",
+    "got-scraping": "^4.1.2",
+    "hpagent": "^1.2.0",
+    "inquirer": "^12.9.4",
+    "socks-proxy-agent": "^8.0.5"
+  }
+}

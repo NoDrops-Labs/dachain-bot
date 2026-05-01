@@ -1,0 +1,9 @@
+# SimpleChain Bot - Proxy Configuration
+# Add one proxy per line
+# Format: protocol://user:pass@host:port
+# Example: http://user:pass@proxy.example.com:8080
+#
+# Supported protocols: http, https, socks4, socks5
+# If no protocol specified, http:// will be assumed
+#
+# Lines starting with # are ignored
