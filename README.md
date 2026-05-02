@@ -393,7 +393,7 @@ This will show detailed API requests and responses in logs.
 
 ## License
 
-MIT
+[MIT](LICENSE)
 
 ## Disclaimer
 
