@@ -4,29 +4,6 @@ Automated bot for DAChain Testnet Inception with support for multi-account, prox
 
 > 💡 **Join Our Community**: For updates, support, and discussions, join our Telegram channel: [@NoDrops](https://t.me/NoDrops)
 
-## ✨ Recent Updates (May 2026)
-
-### 🛡️ Stability & Reliability Improvements
-- **Atomic Data Persistence** - Race-free concurrent writes with mutex locking
-- **Session Recovery** - Automatic re-authentication on session expiry across all operations
-- **Circuit Breakers** - Prevents cascading failures with automatic service protection
-- **RPC Error Handling** - Graceful handling of 504 Gateway Timeout and network errors
-- **Profile Data Preservation** - Maintains account data across retry attempts
-
-### 🔧 Bug Fixes
-- Fixed blockchainBalance variable shadowing causing null values
-- Fixed NaN flickering in TUI display
-- Fixed profile data loss after HTTP 503 retries
-- Fixed unhandled RPC errors crashing the bot
-- Fixed loop mode configuration not being applied
-- Fixed missing config properties (transactions, onchain, quantumCrates)
-
-### 🎯 Enhanced Features
-- **Real-time Blockchain Balance** - Tracks DACC balance from RPC at multiple checkpoints
-- **Improved Error Messages** - Clear, actionable error descriptions
-- **Better Retry Logic** - Smart retry with exponential backoff and jitter
-- **Checkpoint System** - 8-stage progress tracking prevents duplicate operations
-
 ## Features
 
 - 🔐 **Wallet Authentication** - Ethereum wallet-based authentication with SIWE
@@ -403,15 +380,6 @@ dachain-bot/
 - **Symbol**: `DACC`
 - **Explorer**: `https://exptest.dachain.tech`
 - **App**: `https://inception.dachain.io`
-- **Referral**: `DAC541493`
-
-## Development
-
-### Running Tests
-
-```bash
-npm test
-```
 
 ### Debug Mode
 
