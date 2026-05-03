@@ -2,7 +2,8 @@
 
 Automated bot for DAChain Testnet Inception with support for multi-account, proxy rotation, and concurrent processing.
 
-> 💡 **Join Our Community**: For updates, support, and discussions, join our Telegram channel: [@NoDrops](https://t.me/NoDrops)
+> 💡 **Join Our Community**: For updates, support, and discussions, join our Telegram channel: [@NoDrops](https://t.me/NoDrops) \
+
 > **Code Obfuscation Notice**: This script will be obfuscated to prevent unauthorized code redistribution. The full source code will be shared publicly after the event ends.
 
 ## Features
