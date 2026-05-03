@@ -1,0 +1,13 @@
+.env
+scrape.md
+.reference/
+docs/
+test/
+.sisyphus/
+node_modules/
+.DS_Store
+logs/*
+!logs/.gitkeep
+data/*
+!data/.gitkeep
+package-lock.json
