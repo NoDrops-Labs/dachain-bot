@@ -1,4 +1,5 @@
 import { pathToFileURL } from 'node:url';
+import path from 'path';
 
 let dotenvLoaded = false;
 async function loadDotenv() {
@@ -79,8 +80,12 @@ export async function main(args = process.argv.slice(2), overrides = {}) {
   }
   
   if (command === 'check-log') {
-    const hasEntries = await checkLog();
-    console.log(hasEntries ? 'Log has entries.' : 'Log is empty or missing.');
+    const content = await checkLog();
+    if (content) {
+      console.log(content);
+    } else {
+      console.log('Log is empty or missing.');
+    }
     return 'check-log';
   }
   
@@ -208,30 +213,21 @@ export async function main(args = process.argv.slice(2), overrides = {}) {
       if (result.dashboard.renderTimeout) {
         clearTimeout(result.dashboard.renderTimeout);
       }
-      if (result.dashboard._loopTimer) {
-        clearInterval(result.dashboard._loopTimer);
-      }
     }
     
-    console.log(`\nLoop mode: ${config.enableLoop ? 'ENABLED' : 'DISABLED'}`);
-    console.log(`Loop delay: ${config.loopDelay}ms (${Math.floor(config.loopDelay / 3600000)}h ${Math.floor((config.loopDelay % 3600000) / 60000)}m)`);
-    
     if (!config.enableLoop) {
+      if (result && result.dashboard && result.dashboard._loopTimer) {
+        clearInterval(result.dashboard._loopTimer);
+      }
       console.log('\nLoop mode disabled. Exiting...');
       break;
     }
     
-    const delayMs = config.loopDelay;
-    const delayHours = Math.floor(delayMs / 3600000);
-    const delayMinutes = Math.floor((delayMs % 3600000) / 60000);
+    if (result && result.dashboard) {
+      result.dashboard.setLoopState(true, config.loopDelay, path.join(process.cwd(), 'data', 'data.json'));
+    }
     
-    console.log(`\n${'='.repeat(60)}`);
-    console.log(`Run #${runCount} completed. Next run in ${delayHours}h ${delayMinutes}m`);
-    console.log(`Next run at: ${new Date(Date.now() + delayMs).toLocaleString()}`);
-    console.log('='.repeat(60));
-    console.log('Press Ctrl+C to stop\n');
-    
-    await new Promise(resolve => setTimeout(resolve, delayMs));
+    await new Promise(resolve => setTimeout(resolve, config.loopDelay));
   }
   
   return 'start';

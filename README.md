@@ -3,10 +3,12 @@
 Automated bot for DAChain Testnet Inception with support for multi-account, proxy rotation, and concurrent processing.
 
 > 💡 **Join Our Community**: For updates, support, and discussions, join our Telegram channel: [@NoDrops](https://t.me/NoDrops)
+> **Code Obfuscation Notice**: This script will be obfuscated to prevent unauthorized code redistribution. The full source code will be shared publicly after the event ends.
 
 ## Features
 
-- 🔐 **Wallet Authentication** - Ethereum wallet-based authentication with SIWE
+- 🔐 **Wallet Authentication** - SIWE (Sign-In With Ethereum) authentication
+- 💾 **Session Caching** - Stores session tokens with automatic re-authentication
 - 🎯 **Task Automation** - Auto-complete daily tasks, faucet claims, and badge minting
 - 💰 **Transaction Automation** - Automated DACC transactions between wallets
 - 🔥 **Onchain Operations** - DACC burn for QE and staking support
@@ -14,12 +16,10 @@ Automated bot for DAChain Testnet Inception with support for multi-account, prox
 - 👥 **Multi-Account** - Process multiple accounts with pool-based concurrency
 - 🔄 **Proxy Support** - HTTP, HTTPS, SOCKS4, and SOCKS5 proxies with rotation
 - 🛡️ **Smart Proxy Management** - Gradual blocking, failure tracking, and automatic fallback
-- 📊 **TUI Dashboard** - Real-time monitoring with cached data display and proxy statistics
+- 📊 **TUI Dashboard** - Real-time monitoring with loop countdown and proxy statistics
 - ⏱️ **Smart Delays** - Random delays between accounts to avoid rate limiting
 - 🔁 **Loop Mode** - Schedule automatic reruns every 8 hours
-- 💾 **Session Caching** - Stores session tokens to skip re-authentication
 - 🔄 **Auto-Retry** - Intelligent retry with Circuit Breaker protection
-- 📈 **Real-time Balance Tracking** - Monitors blockchain DACC balance throughout execution
 
 ## Requirements
 
@@ -31,45 +31,25 @@ Automated bot for DAChain Testnet Inception with support for multi-account, prox
 
 ## Quick Start
 
-### 1. Interactive Setup (Recommended)
+### 1. Install Dependencies
 
-Run the interactive setup wizard - it will automatically install dependencies if needed:
+```bash
+npm install
+```
+
+### 2. Interactive Setup (Recommended)
+
+Run the interactive setup wizard to configure everything:
 
 ```bash
 npm run setup
 ```
 
-The setup wizard will:
-- ✅ Auto-install dependencies if `node_modules` is missing
-- 📝 Prompt for private keys (comma or space separated)
-- 🌐 Prompt for proxies (optional, comma or space separated)
-- 📁 Create `.env` and `proxies.txt` files
+The setup wizard will guide you through:
+- **Private Keys** - Enter your wallet private keys (comma or space separated)
+- **Proxies** - Optional proxy list (comma or space separated)
 
-**Example:**
-```
-$ npm run setup
-
-⚠️  Dependencies not found. Installing...
-✅ Dependencies installed successfully!
-
-╔════════════════════════════════════════╗
-║     DAChain Bot Setup Wizard          ║
-╚════════════════════════════════════════╝
-
-? 📝 Enter private keys (comma or space separated): 
-  0xabc..., 0xdef..., 0x123...
-
-? 🌐 Enter proxies (comma or space separated, optional): 
-  http://user:pass@proxy1.com:8080, socks5://user:pass@proxy2.com:1080
-
-📁 Files created:
-   ✅ .env (3 private keys)
-   ✅ proxies.txt (2 proxies)
-
-✅ Setup complete! Run: npm start
-```
-
-### 2. Manual Configuration (Alternative)
+### 3. Manual Configuration (Alternative)
 
 If you prefer manual setup:
 
@@ -96,7 +76,7 @@ socks4://proxy3.com:1080
 - SOCKS5: `socks5://user:pass@host:port` or `socks5://host:port`
 - SOCKS4: `socks4://user:pass@host:port` or `socks4://host:port`
 
-### 3. Run the Bot
+### 4. Run the Bot
 
 ```bash
 npm start
@@ -138,25 +118,6 @@ The bot uses an 8-stage checkpoint system to prevent duplicate operations:
 8. Onchain operations done
 
 Each checkpoint is saved to `data.json`, so if the bot crashes or is interrupted, it resumes from the last checkpoint on retry.
-
-### Error Handling & Resilience
-
-**Circuit Breakers** - All services protected with circuit breakers:
-- Opens after 5 consecutive failures
-- Prevents cascading failures and API hammering
-- Auto-resets after 60 seconds
-
-**Smart Retry Logic**:
-- Exponential backoff with jitter
-- Error-type-specific retry limits
-- Session expiry triggers automatic re-authentication
-- RPC errors handled gracefully (no crashes)
-
-**Data Persistence**:
-- Atomic writes with mutex locking (no race conditions)
-- Temp file + rename pattern (no corruption)
-- Write errors propagated (no silent failures)
-- Concurrent account processing safe
 
 ### Pool-Based Concurrency
 
@@ -225,49 +186,11 @@ export default {
 };
 ```
 
-### Configuration Options
-
-#### Core Settings
-- `debug` - Enable verbose logging for debugging
-- `enableLoop` - Run continuously with automatic reruns
-- `loopDelayMinutes` - Time between cycles (default: 480 = 8 hours)
-
-#### Retry Settings
-- `maxProxyRetries` - Max proxy rotation attempts per account
-- `maxApiRetries` - Max API retry attempts for transient errors
-
-#### Fallback Settings
-- `noProxyOnExhausted` - Use direct connection when all proxies blocked (not recommended)
-
-#### Delay Settings (in seconds)
-- `betweenAccountsMin/Max` - Random delay between account processing
-- `afterTaskComplete` - Delay after completing a task
-- `afterError` - Delay after encountering an error
-- `betweenRequestsMin/Max` - Random delay between API requests
-
-#### Transaction Settings
-- `enabled` - Enable automated transactions
-- `dailyMin/Max` - Number of transactions per account per run
-- `amountMin/Max` - Transaction amount range in DACC
-- `minBalanceThreshold` - Minimum balance required to send transactions
-- `delayBetweenTxMin/Max` - Delay between transactions in seconds
-
-#### Onchain Settings
-- `burnEnabled` - Enable one-time DACC burn for QE rewards
-- `stakeEnabled` - Enable one-time DACC staking
-- `stakeAmountMin/Max` - Stake amount range in DACC
-
-#### Quantum Crates Settings
-- `enabled` - Enable automated crate opening (default: false)
-- `maxOpensPerRun` - Maximum crates to open per run (max: 5 per API limit)
-
 **Configuration Notes:**
 - Time values use **human-readable units** (minutes and seconds)
 - `loopDelayMinutes: 480` = 8 hours
 - Delays are automatically converted to milliseconds internally
 - Random delays help avoid rate limiting and detection
-- **Config fallback**: Bot uses default values if `config.js` is missing
-- **All config sections required**: Missing sections will cause errors
 
 ## Data Storage
 
@@ -277,13 +200,7 @@ export default {
 | `proxies.txt` | Proxy list |
 | `logs/process.log` | Activity logs with timestamps |
 | `data/data.json` | Cached sessions and account state |
-
-**Security Notes:**
-- ✅ Private keys stored ONLY in `.env` (gitignored)
-- ✅ Private keys NEVER logged or transmitted
-- ✅ All network requests go to `inception.dachain.io` only
-- ✅ Session tokens stored locally in `data/data.json`
-- ⚠️ Protect `.env` and `data/data.json` - never commit to git
+| `data/data.json.lock` | File lock for concurrent access protection |
 
 ## Utility Scripts
 
@@ -311,31 +228,6 @@ npm run check-data     # Show account summary with points
 | Bot exits immediately | Check logs with `npm run check-log` |
 | "Cannot read properties of undefined" | Ensure all config sections exist (transactions, onchain, quantumCrates) |
 | RPC 504 Gateway Timeout | Bot handles gracefully, will skip onchain operations and continue |
-| Loop mode not working | Check `config.js` has `enableLoop: true` and all config sections present |
-| NaN in TUI display | Update to latest version with NaN fixes |
-| Profile data lost after retry | Update to latest version with retry checkpoint fixes |
-
-### Common Error Messages
-
-**"Cannot read properties of undefined (reading 'minBalanceThreshold')"**
-- Missing `transactions` section in config.js
-- Solution: Ensure config.js includes all sections from the template
-
-**"Cannot read properties of undefined (reading 'burnEnabled')"**
-- Missing `onchain` section in config.js
-- Solution: Ensure config.js includes all sections from the template
-
-**"server response 504 Gateway Time-out"**
-- RPC endpoint temporarily unavailable
-- Solution: Bot handles this automatically, will skip blockchain operations
-
-**"Faucet still pending after 15 attempts"**
-- Faucet backend processing delay
-- Solution: Normal behavior, faucet will be available on next run
-
-**"Insufficient QE for crate opening"**
-- Account doesn't have enough QE (need 150 QE minimum)
-- Solution: Earn more QE through tasks and faucet claims
 
 ## Project Structure
 
@@ -380,24 +272,39 @@ dachain-bot/
 - **Symbol**: `DACC`
 - **Explorer**: `https://exptest.dachain.tech`
 - **App**: `https://inception.dachain.io`
+- **Referral**: `DAC541493`
 
-### Debug Mode
+## Notes
 
-Enable debug logging in `config.js`:
-
-```javascript
-debug: true
-```
-
-This will show detailed API requests and responses in logs.
-
-## License
-
-[MIT](LICENSE)
+- **Account Setup**: Register at [https://inception.dachain.io?ref=DAC541493](https://inception.dachain.io?ref=DAC541493) and connect wallet
+- **Daily Limits**: Faucet cooldown is 8 hours, crate opening limited to 5 per day
+- **Concurrency**: Based on proxy count (1 account at a time without proxies)
+- **Delays**: Random 3-10s delay between accounts to avoid rate limiting
+- **Session Cache**: Stored locally, never shared or uploaded
+- **Proxy Blocking**: Proxies are blocked after 3 consecutive failures
+- **Dashboard**: Shows Total/Working/Blocked proxy statistics and loop countdown timer
+- **Circuit Breakers**: All services protected, opens after 5 failures, auto-resets after 60s
+- **File Locking**: Prevents data.json corruption from concurrent access
 
 ## Disclaimer
 
 This bot is for educational purposes only. Use at your own risk. Always ensure you comply with the terms of service of the platforms you interact with.
+
+## Support the Project
+
+If this project has been helpful to you, consider supporting its development with donations:
+
+| Network | Address |
+|---------|---------|
+| **EVM** | `0xfD1847bFAA92fb8c0d100b207d377490C5acd34c` |
+| **SOL** | `BBZjp11sJNvekXZEBhhYDro9gsyyhEKXXcfEEub5ubje` |
+| **TON** | `UQDoLQNF-nt9CFOHBs9mQqxH9YJKrZ6mFPbAeHH8Jo9xIGCb` |
+| **SUI** | `0x79672047f5e2fa0c4db3e4278f80b9ac504b2858c6d82d63f833fbdcc6805175` |
+| **TRX** | `TUq1ijVy3rwm9f66ohPhDVbD3dDd3Astfx` |
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 

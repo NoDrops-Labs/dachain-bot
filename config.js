@@ -1,6 +1,6 @@
 export default {
   debug: false,            // Enable verbose logging for debugging (shows API requests/responses)
-  enableLoop: true,        // Run continuously with automatic reruns (false = run once and exit)
+  enableLoop: false,        // Run continuously with automatic reruns (false = run once and exit)
   loopDelayMinutes: 480,   // Time between cycles in minutes (480 = 8 hours)
   
   retry: {
@@ -25,8 +25,8 @@ export default {
     enabled: true,            // Enable automated DACC transactions between wallets
     dailyMin: 3,              // Minimum transactions per account per run
     dailyMax: 5,              // Maximum transactions per account per run (randomized)
-    amountMin: 0.01,          // Minimum transaction amount in DACC
-    amountMax: 0.05,          // Maximum transaction amount in DACC (randomized)
+    amountMin: 0.1,          // Minimum transaction amount in DACC
+    amountMax: 0.5,          // Maximum transaction amount in DACC (randomized)
     minBalanceThreshold: 0.35, // Minimum DACC balance required to send transactions (reserves gas)
     delayBetweenTxMin: 2,     // Min delay between transactions (seconds)
     delayBetweenTxMax: 8,     // Max delay between transactions (seconds) - randomized
@@ -36,11 +36,11 @@ export default {
     burnEnabled: true,        // Enable one-time DACC burn for QE rewards (burns small amount for points)
     stakeEnabled: true,       // Enable one-time DACC staking (locks DACC for rewards)
     stakeAmountMin: 0.1,      // Minimum DACC to stake (randomized between min/max)
-    stakeAmountMax: 1.0,      // Maximum DACC to stake (adjust based on your balance)
+    stakeAmountMax: 0.5,      // Maximum DACC to stake (adjust based on your balance)
   },
 
   quantumCrates: {
-    enabled: false,           // Enable automated quantum crate opening (requires 150 QE per crate)
+    enabled: true,            // Enable automated quantum crate opening (requires 150 QE per crate)
     maxOpensPerRun: 5,        // Max crates to open per account per run (API limit: 5)
   },
 };
